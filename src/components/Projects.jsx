@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Projects = () => {
+const Projects = ({ projects }) => {
   const containerStyle = {
     display: "flex",
     flexDirection: "column",
@@ -9,10 +9,11 @@ const Projects = () => {
     backgroundColor: "#f0f0f0",
     maxWidth: "100%",
     margin: "0 auto",
+    fontFamily: "Arial, sans-serif",
   };
 
   const projectContainerStyle = {
-    maxWidth: "800px",
+    maxWidth: "1100px",
     width: "100%",
     backgroundColor: "#fff",
     borderRadius: "10px",
@@ -23,8 +24,8 @@ const Projects = () => {
 
   const screenshotContainerStyle = {
     display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "10px",
+    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+    gap: "20px",
     padding: "20px",
     borderBottom: "1px solid #ccc",
   };
@@ -32,13 +33,27 @@ const Projects = () => {
   const screenshotStyle = {
     width: "100%",
     height: "auto",
-    borderRadius: "5px",
+    borderRadius: "10px",
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+    cursor: "pointer",
+    transition: "transform 0.3s ease-in-out",
   };
 
   const descriptionStyle = {
     padding: "20px",
     lineHeight: "1.6",
+    fontFamily: "Arial, sans-serif",
+  };
+
+  const projectNameStyle = {
+    fontSize: "2rem",
+    marginBottom: "10px",
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
+  };
+
+  const projectDescriptionStyle = {
+    fontFamily: "Arial, sans-serif",
   };
 
   const linkContainerStyle = {
@@ -50,55 +65,103 @@ const Projects = () => {
   };
 
   const liveDemoLinkStyle = {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    borderRadius: "5px",
+    padding: "12px 24px",
+    backgroundColor: "transparent",
+    color: "#007bff",
+    borderRadius: "8px",
     textDecoration: "none",
-    transition: "background-color 0.3s",
+    transition: "background-color 0.3s, transform 0.3s, color 0.3s",
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
+    display: "inline-block",
+    border: "2px solid #007bff",
+    cursor: "pointer",
   };
 
-  const projectName = "Project Name";
-  const projectScreenshots = [
-    "/.png",
-    "/screenshot2.png",
-    // Add more screenshots as needed
-  ];
-  const projectDescription =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu risus vitae tortor tincidunt condimentum. Phasellus varius est eu nisl aliquam, eget accumsan dui fermentum. Duis iaculis volutpat eros at efficitur. Donec sit amet vehicula dolor. Sed et tellus euismod, vulputate elit ac, sodales est. In hac habitasse platea dictumst. Proin dictum, ipsum eu molestie placerat, libero tortor dapibus libero, at posuere justo erat nec magna.";
+  const liveDemoLinkHoverStyle = {
+    backgroundColor: "#007bff",
+    color: "#fff",
+    transform: "scale(1.05)",
+  };
 
-  const liveDemoLink = "https://example.com";
+  const openLightbox = (src) => {
+    setLightboxImage(src);
+  };
+
+  const closeLightbox = () => {
+    setLightboxImage(null);
+  };
+
+  const [lightboxImage, setLightboxImage] = useState(null);
+  const [hovered, setHovered] = useState(null);
 
   return (
     <div style={containerStyle}>
-      <div style={projectContainerStyle}>
-        <div style={screenshotContainerStyle}>
-          {projectScreenshots.map((screenshot, index) => (
-            <img
-              key={index}
-              src={process.env.PUBLIC_URL + screenshot}
-              alt={`Screenshot ${index + 1}`}
-              style={screenshotStyle}
-            />
-          ))}
+      {projects.map((project, projectIndex) => (
+        <div key={projectIndex} style={projectContainerStyle}>
+          <div style={screenshotContainerStyle}>
+            {project.projectScreenshots.map((screenshot, index) => (
+              <img
+                key={index}
+                src={process.env.PUBLIC_URL + screenshot.src}
+                alt={screenshot.caption}
+                style={screenshotStyle}
+                onClick={() =>
+                  openLightbox(process.env.PUBLIC_URL + screenshot.src)
+                }
+              />
+            ))}
+          </div>
+          <div style={descriptionStyle}>
+            <h2 style={projectNameStyle}>{project.projectName}</h2>
+            <p style={projectDescriptionStyle}>{project.projectDescription}</p>
+          </div>
+          <div style={linkContainerStyle}>
+            <a
+              href={project.liveDemoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                ...liveDemoLinkStyle,
+                ...(hovered === projectIndex ? liveDemoLinkHoverStyle : {}),
+              }}
+              onMouseEnter={() => setHovered(projectIndex)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              View Live Demo
+            </a>
+          </div>
         </div>
-        <div style={descriptionStyle}>
-          <h2 style={{ fontSize: "2rem", marginBottom: "10px" }}>
-            {projectName}
-          </h2>
-          <p>{projectDescription}</p>
+      ))}
+
+      {lightboxImage && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+          onClick={closeLightbox}
+        >
+          <img
+            src={lightboxImage}
+            alt="Enlarged Screenshot"
+            style={{
+              maxWidth: "70%",
+              maxHeight: "70%",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
+              borderRadius: "10px",
+            }}
+          />
         </div>
-        <div style={linkContainerStyle}>
-          <a
-            href={liveDemoLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={liveDemoLinkStyle}
-          >
-            View Live Demo
-          </a>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

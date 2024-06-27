@@ -13,7 +13,7 @@ const Skills = () => {
 
   const sectionStyle = {
     marginBottom: "40px",
-    width: "100%",
+    width: "1200px",
   };
 
   const headingStyle = {
