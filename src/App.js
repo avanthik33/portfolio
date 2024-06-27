@@ -2,6 +2,7 @@ import "./App.css";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Welcome from "./components/Welcome";
+import ContactInfo from "./components/contactInfo";
 
 function App() {
   const projects = [
@@ -89,11 +90,13 @@ function App() {
       liveDemoLink: "https://campusautomation.onrender.com/",
     },
   ];
+
   return (
     <div className="App">
       <Welcome />
       <Skills />
       <Projects projects={projects} />
+      <ContactInfo />
     </div>
   );
 }

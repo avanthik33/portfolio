@@ -9,7 +9,7 @@ const Projects = ({ projects }) => {
     backgroundColor: "#f0f0f0",
     maxWidth: "100%",
     margin: "0 auto",
-    fontFamily: "Arial, sans-serif", // Example font family
+    fontFamily: "Arial, sans-serif",
   };
 
   const projectContainerStyle = {
@@ -37,26 +37,23 @@ const Projects = ({ projects }) => {
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
     cursor: "pointer",
     transition: "transform 0.3s ease-in-out",
-    ":hover": {
-      transform: "scale(1.05)",
-    },
   };
 
   const descriptionStyle = {
     padding: "20px",
     lineHeight: "1.6",
-    fontFamily: "Arial, sans-serif", // Example font family
+    fontFamily: "Arial, sans-serif",
   };
 
   const projectNameStyle = {
     fontSize: "2rem",
     marginBottom: "10px",
-    fontFamily: "Arial, sans-serif", // Example font family
-    fontWeight: "bold", // Example font weight
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
   };
 
   const projectDescriptionStyle = {
-    fontFamily: "Arial, sans-serif", // Example font family
+    fontFamily: "Arial, sans-serif",
   };
 
   const linkContainerStyle = {
@@ -68,13 +65,23 @@ const Projects = ({ projects }) => {
   };
 
   const liveDemoLinkStyle = {
-    padding: "10px 20px",
+    padding: "12px 24px",
+    backgroundColor: "transparent",
+    color: "#007bff",
+    borderRadius: "8px",
+    textDecoration: "none",
+    transition: "background-color 0.3s, transform 0.3s, color 0.3s",
+    fontFamily: "Arial, sans-serif",
+    fontWeight: "bold",
+    display: "inline-block",
+    border: "2px solid #007bff",
+    cursor: "pointer",
+  };
+
+  const liveDemoLinkHoverStyle = {
     backgroundColor: "#007bff",
     color: "#fff",
-    borderRadius: "5px",
-    textDecoration: "none",
-    transition: "background-color 0.3s",
-    fontFamily: "Arial, sans-serif", // Example font family
+    transform: "scale(1.05)",
   };
 
   const openLightbox = (src) => {
@@ -86,6 +93,7 @@ const Projects = ({ projects }) => {
   };
 
   const [lightboxImage, setLightboxImage] = useState(null);
+  const [hovered, setHovered] = useState(null);
 
   return (
     <div style={containerStyle}>
@@ -113,7 +121,12 @@ const Projects = ({ projects }) => {
               href={project.liveDemoLink}
               target="_blank"
               rel="noopener noreferrer"
-              style={liveDemoLinkStyle}
+              style={{
+                ...liveDemoLinkStyle,
+                ...(hovered === projectIndex ? liveDemoLinkHoverStyle : {}),
+              }}
+              onMouseEnter={() => setHovered(projectIndex)}
+              onMouseLeave={() => setHovered(null)}
             >
               View Live Demo
             </a>
